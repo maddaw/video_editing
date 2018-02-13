@@ -6,10 +6,62 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowState(Qt::WindowMaximized);
+    //setWindowState(Qt::WindowMaximized);
+
+    player = new QMediaPlayer(this);
+    vw = new QVideoWidget(this);
+    player->setVideoOutput(vw);
+    this->setCentralWidget(vw); //centralWidget umiejscawia na srodku film
+
+    slider = new QSlider(this);
+    bar = new QProgressBar(this);
+
+    slider->setOrientation(Qt::Horizontal);
+
+    ui->statusBar->addPermanentWidget(slider);
+    ui->statusBar->addPermanentWidget(bar);
+
+    connect(player,&QMediaPlayer::durationChanged,slider,&QSlider::setMaximum);
+    connect(player,&QMediaPlayer::positionChanged,slider,&QSlider::setValue);
+    connect(slider,&QSlider::sliderMoved,player,&QMediaPlayer::setPosition);
+
+    connect(player,&QMediaPlayer::durationChanged,bar,&QProgressBar::setMaximum);
+    connect(player,&QMediaPlayer::positionChanged,bar,&QProgressBar::setValue);
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    QString filename = QFileDialog::getOpenFileName(this,"Open A File","","Video File (*.*)"); //mozna ustawic filtr jakie pliki widzimy np: (*.avi, *mpg, *.mp4)");
+    on_actionStop_triggered();
+
+    player->setMedia(QUrl::fromLocalFile(filename));
+
+    on_actionPlay_triggered();
+}
+
+void MainWindow::on_actionPlay_triggered()
+{
+    player->play();
+    ui->statusBar->showMessage("Playing");
+
+}
+
+void MainWindow::on_actionPause_triggered()
+{
+    player->pause();
+    ui->statusBar->showMessage("Paused...");
+
+}
+
+void MainWindow::on_actionStop_triggered()
+{
+    player->stop();
+    ui->statusBar->showMessage("Stopped");
+
 }

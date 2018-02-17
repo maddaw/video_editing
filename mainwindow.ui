@@ -6,26 +6,72 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>740</width>
-    <height>507</height>
+    <width>985</width>
+    <height>495</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLabel" name="label">
+   <widget class="QRadioButton" name="radioButton">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>200</y>
-      <width>181</width>
-      <height>151</height>
+      <x>160</x>
+      <y>40</y>
+      <width>95</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string/>
+     <string>RadioButton</string>
     </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_2">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>50</y>
+      <width>95</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>RadioButton</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>40</y>
+      <width>295</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -33,7 +79,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>740</width>
+     <width>985</width>
      <height>26</height>
     </rect>
    </property>
@@ -71,7 +117,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/images/icon/folder_open.jpg</normaloff>:/images/icon/folder_open.jpg</iconset>
+     <normaloff>:/images/icon/folder_page_white.png</normaloff>:/images/icon/folder_page_white.png</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -83,7 +129,7 @@
   <action name="actionPlay">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/images/icon/play.png</normaloff>:/images/icon/play.png</iconset>
+     <normaloff>:/images/icon/control_play.png</normaloff>:/images/icon/control_play.png</iconset>
    </property>
    <property name="text">
     <string>Play</string>
@@ -92,7 +138,7 @@
   <action name="actionPause">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/images/icon/pause.jpg</normaloff>:/images/icon/pause.jpg</iconset>
+     <normaloff>:/images/icon/control_pause.png</normaloff>:/images/icon/control_pause.png</iconset>
    </property>
    <property name="text">
     <string>Pause</string>
@@ -100,8 +146,8 @@
   </action>
   <action name="actionStop">
    <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/images/icon/stop.jpg</normaloff>:/images/icon/stop.jpg</iconset>
+    <iconset>
+     <normaloff>icon/control_stop.png</normaloff>icon/control_stop.png</iconset>
    </property>
    <property name="text">
     <string>Stop</string>

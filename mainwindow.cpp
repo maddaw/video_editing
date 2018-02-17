@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //setWindowState(Qt::WindowMaximized);
+    setWindowState(Qt::WindowMaximized);
 
     player = new QMediaPlayer(this);
     vw = new QVideoWidget(this);

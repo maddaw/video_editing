@@ -1,32 +1,40 @@
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_mainwindow.h"
+
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowState(Qt::WindowMaximized);
+    setWindowTitle("QtPlayerTemplate");
 
-    player = new QMediaPlayer(this);
-    vw = new QVideoWidget(this);
-    player->setVideoOutput(vw);
-    this->setCentralWidget(vw); //centralWidget umiejscawia na srodku film
+    mainLayout = new QVBoxLayout(this);
 
-    slider = new QSlider(this);
-    bar = new QProgressBar(this);
+    topLayout = new QHBoxLayout();
+    middleLayout = new QHBoxLayout();
+    bottomLayout = new QHBoxLayout();
 
-    slider->setOrientation(Qt::Horizontal);
+    completePlayer = new CustomMediaPlayer(centralWidget());
 
-    ui->statusBar->addPermanentWidget(slider);
-    ui->statusBar->addPermanentWidget(bar);
+    playlistView = new PlaylistView(centralWidget(), completePlayer);
 
-    connect(player,&QMediaPlayer::durationChanged,slider,&QSlider::setMaximum);
-    connect(player,&QMediaPlayer::positionChanged,slider,&QSlider::setValue);
-    connect(slider,&QSlider::sliderMoved,player,&QMediaPlayer::setPosition);
+    topLayout->addWidget(playlistView);
+    topLayout->addWidget(completePlayer);
 
-    connect(player,&QMediaPlayer::durationChanged,bar,&QProgressBar::setMaximum);
-    connect(player,&QMediaPlayer::positionChanged,bar,&QProgressBar::setValue);
+    mainLayout->addLayout(topLayout);
+    mainLayout->addLayout(middleLayout);
+    mainLayout->addLayout(bottomLayout);
+
+    this->centralWidget()->setLayout(mainLayout);
+
+    connect(completePlayer, &CustomMediaPlayer::mediaAdded, playlistView, &PlaylistView::addLabel);
+
+    setDefaultSize();
+
+
+
 
 }
 
@@ -35,33 +43,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_actionOpen_triggered()
+void MainWindow::setDefaultSize()
 {
-    QString filename = QFileDialog::getOpenFileName(this,"Open A File","","Video File (*.*)"); //mozna ustawic filtr jakie pliki widzimy np: (*.avi, *mpg, *.mp4)");
-    on_actionStop_triggered();
+    QSize availableSize;
+    this->move(qApp->desktop()->availableGeometry().width() / 2, qApp->desktop()->availableGeometry().height() / 2);
 
-    player->setMedia(QUrl::fromLocalFile(filename));
+    availableSize.setWidth( availableSize.width() * 0.6);
+    availableSize.setHeight( availableSize.height() * 0.6);
 
-    on_actionPlay_triggered();
-}
-
-void MainWindow::on_actionPlay_triggered()
-{
-    player->play();
-    ui->statusBar->showMessage("Playing");
-
-}
-
-void MainWindow::on_actionPause_triggered()
-{
-    player->pause();
-    ui->statusBar->showMessage("Paused...");
-
-}
-
-void MainWindow::on_actionStop_triggered()
-{
-    player->stop();
-    ui->statusBar->showMessage("Stopped");
+    this->resize(availableSize);
 
 }

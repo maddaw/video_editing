@@ -13,7 +13,7 @@ MediaControls::MediaControls(QWidget *parent = nullptr, QString tempMediaFolder 
    topLayout = new QHBoxLayout(this);
    bottomLayout = new QHBoxLayout(this);
 
-   addMedia = new QPushButton("ADD", this);
+   addMedia = new QPushButton("ADD",this);
    addMedia->setCursor(Qt::PointingHandCursor);
 
    removeMedia = new QPushButton("REMOVE", this);
@@ -45,7 +45,7 @@ void MediaControls::addReleased()
 {
     qDebug() << "Media Controls Connection ADD";
 
-    QString selectedVideo = QFileDialog::getOpenFileName(this, tr("Select video"),"c:\\", nullptr);
+    QString selectedVideo = QFileDialog::getOpenFileName(this, "Open a file", "c:\\", nullptr); //(this, tr("Select video"),"c:\\", nullptr);
 
     resourcesList->addItem(selectedVideo);
 

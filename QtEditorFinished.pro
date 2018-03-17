@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-03-01T18:48:56
+# Project created by QtCreator 2018-03-14T16:59:11
 #
 #-------------------------------------------------
 
@@ -8,7 +8,7 @@ QT       += core gui multimedia multimediawidgets widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = QtPlayerTemplate
+TARGET = QtEditorFinished
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -24,17 +24,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-    MediaPlayer.cpp \
-    PlayerControls.cpp \
-    PlaylistView.cpp \
     MainWindow.cpp \
-    Main.cpp
+    Main.cpp \
+    MediaContainer.cpp \
+    MediaPlayer.cpp \
+    MediaControls.cpp \
+    EditorControls.cpp
 
 HEADERS += \
-    PlayerControls.h \
+    MainWindow.h \
+    MediaContainer.h \
     MediaPlayer.h \
-    PlaylistView.h \
-    MainWindow.h
+    MediaControls.h \
+    EditorControls.h
 
 FORMS += \
         mainwindow.ui

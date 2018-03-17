@@ -1,75 +1,117 @@
 #include "MediaPlayer.h"
 
-
-CustomMediaPlayer::CustomMediaPlayer(QWidget *parent) : QWidget(parent)
+MediaPlayer::MediaPlayer(QWidget *parent = nullptr)
 {
+   this->setParent(parent);
 
-    this->setParent(parent);
+   mainLayout = new QVBoxLayout(this);
 
-    playerMainLayout = new QVBoxLayout(this);
+   primaryLayout = new QHBoxLayout(this);
+   secondaryLayout = new QHBoxLayout(this);
 
-    playerMain = new QMediaPlayer(this);
-    playlistMain = new QMediaPlaylist(this);
-    playlistMain->setCurrentIndex(-1);
-    playerMain->setPlaylist(playlistMain);
+   playerMain = new QMediaPlayer(this);
+   playerMain->setVolume(100);
+
+   playerOutput = new QVideoWidget(this);
+   playerOutput->setMinimumSize(600, 480);
+
+   playerMain->setVideoOutput(playerOutput);
+
+   playButton = new QPushButton("PLAY", this);
+   playButton->setCursor(Qt::PointingHandCursor);
+
+   pauseButton = new QPushButton("PAUSE", this);
+   pauseButton->setCursor(Qt::PointingHandCursor);
+
+   timeStamp = new QLabel("00:00:00/00:00:00", this);
+
+   audioSlider = new QSlider(Qt::Horizontal, this);
+   audioSlider->setCursor(Qt::PointingHandCursor);
+   audioSlider->setMaximumWidth(100);
+   audioSlider->setMaximum(100);
+   audioSlider->setValue(100);
+
+   primaryLayout->addWidget(playerOutput);
+
+   secondaryLayout->addWidget(playButton);
+   secondaryLayout->addWidget(pauseButton);
+   secondaryLayout->addWidget(timeStamp);
+   secondaryLayout->addWidget(audioSlider);
+
+   mainLayout->addLayout(primaryLayout);
+   mainLayout->addLayout(secondaryLayout);
+
+   connect(playButton, &QPushButton::released, playerMain, &QMediaPlayer::play);
+   connect(pauseButton,&QPushButton::released, playerMain, &QMediaPlayer::pause);
 
 
 
-    outputHolder = new QFrame(this);
-    outputHolder->setMinimumSize(480, 360);
-    outputHolder->setFrameStyle(QFrame::Plain);
-    outputHolder->setFrameShape(QFrame::WinPanel);
-
-    playerOutput = new QVideoWidget(outputHolder);
-    playerOutput->setMinimumSize(outputHolder->size());
-
-    playerOutput->setAspectRatioMode(Qt::KeepAspectRatio);
-
-    playerMain->setVideoOutput(playerOutput);
-
-
-    playerControls = new CustomPlayerControls(playerMain, this);
-
-    playerMainLayout->addWidget(outputHolder);
-    playerMainLayout->addWidget(playerControls);
-
-    this->setLayout(playerMainLayout);
-
-
-    connect(playerControls, &CustomPlayerControls::playSignal, playerMain, &QMediaPlayer::play);
-    connect(playerControls, &CustomPlayerControls::pauseSignal, playerMain, &QMediaPlayer::pause);
-    connect(playerControls, &CustomPlayerControls::addMediaSignal, this, &CustomMediaPlayer::addMedia);
-
-    connect(playerControls, &CustomPlayerControls::volumeChangedSignal, playerMain, &QMediaPlayer::setVolume);
-    connect(playerControls, &CustomPlayerControls::renderChangedSignal, playerMain, &QMediaPlayer::setPosition);
-
-
-   /* POŁĄCZYĆ SIGNALS Z CONTROLOW DO SLOTOW Z PLAYER'A */
-
+   this->setLayout(mainLayout);
 }
 
-QMediaPlaylist* CustomMediaPlayer::getPlaylist()
+void MediaPlayer::setPlaylist(QMediaPlaylist *tempPlaylist = nullptr)
 {
-    return playlistMain;
+    playerMain->setPlaylist(tempPlaylist);
 }
 
-QMediaPlayer* CustomMediaPlayer::getPlayer()
+void MediaPlayer::updateTimeStamp(qint64 posValue)
 {
-    return  playerMain;
+    QString newTimeStamp = getTimeStamp(posValue/1000) + "/" + getTimeStamp(playerMain->duration()/1000);
+    timeStamp->setText(newTimeStamp);
 }
 
-CustomPlayerControls* CustomMediaPlayer::getControls()
+QMediaPlayer* MediaPlayer::getPlayer()
 {
-    return playerControls;
+    return playerMain;
 }
 
-void CustomMediaPlayer::addMedia()
+QMediaPlaylist* MediaPlayer::getPlaylist()
 {
-    qDebug() << "Connection Succeded";
-
-    QString selectedVideo = QFileDialog::getOpenFileName(this, tr("Select video"),"c:\\", nullptr);
-
-    playlistMain->addMedia(QUrl::fromLocalFile(selectedVideo));
-
-    emit mediaAdded(selectedVideo);
+    return playerMain->playlist();
 }
+
+QSlider* MediaPlayer::getSlider()
+{
+    return audioSlider;
+}
+
+/* --------FUNKCJA POMOCNICZA-------- */
+
+QString getTimeStamp(qint64 videoPosition)
+{
+
+
+    qint64 tempValue = videoPosition/3600;
+
+    QString newText;
+
+    if(tempValue >= 10)
+    {
+        newText = newText + QString::number(tempValue) + ":";
+    }else
+    {
+        newText = newText + "0" + QString::number(tempValue) + ":";
+    }
+
+    tempValue = (videoPosition - (tempValue * 3600)) / 60;
+    if(tempValue >= 10)
+    {
+        newText = newText + QString::number(tempValue) + ":";
+    }else
+    {
+        newText = newText + "0" + QString::number(tempValue) + ":";
+    }
+
+    tempValue = videoPosition % 60;
+    if(tempValue >= 10)
+    {
+        newText = newText + QString::number(tempValue);
+    }else
+    {
+        newText = newText + "0" + QString::number(tempValue);
+    }
+
+    return newText;
+}
+
+/*-------------------------------------------------------------------------*/

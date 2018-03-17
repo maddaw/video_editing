@@ -3,43 +3,44 @@
 
 #include <QMainWindow>
 
-#include <QApplication>
-#include <QDesktopWidget>
-
-#include <QMenuBar>
-
-#include <QStyle>
-#include <QSize>
-
+#include "MediaContainer.h"
 #include "MediaPlayer.h"
-#include "PlaylistView.h"
+#include "MediaControls.h"
+#include "EditorControls.h"
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
-    void setDefaultSize();
+    public:
+        explicit MainWindow(QWidget *parent = 0);
 
 
-private:
-    Ui::MainWindow *ui;
 
-    QVBoxLayout *mainLayout;
-    QHBoxLayout *topLayout;
-    QHBoxLayout *middleLayout;
-    QHBoxLayout *bottomLayout;
+        ~MainWindow();
 
-    CustomMediaPlayer *completePlayer;
-    PlaylistView *playlistView;
+    private:
+        Ui::MainWindow *ui;
+
+        QString mediaFolder;
+
+        QVBoxLayout *mainLayout;
+
+        QHBoxLayout *topLayout;
+        QHBoxLayout *middleLayout;
+        QHBoxLayout *bottomLayout;
+
+        MediaPlayer *mediaPlayer;
+        MediaContainer *mediaContainer;
+        MediaControls *mediaControls;
+        EditorControls *editControls;
+
+    public slots:
+
 
 };
-
 #endif // MAINWINDOW_H

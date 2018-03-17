@@ -1,59 +1,56 @@
-#ifndef CUSTOMMEDIAPLAYER_H
-#define CUSTOMMEDIAPLAYER_H
+#ifndef MEDIAPLAYER_H
+#define MEDIAPLAYER_H
 
 #include <QDebug>
+#include <QWidget>
 
 #include <QString>
-#include <QFile>
-#include <QFileDialog>
-
-#include <QUrl>
-
-#include <QFrame>
+#include <QLabel>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QSizePolicy>
 
 #include <QMediaPlayer>
 
-#include <QVideoProbe>
+#include <QPushButton>
 #include <QVideoWidget>
 
-
+#include <QSlider>
 #include <QMediaPlaylist>
 
-#include "PlayerControls.h"
+QString getTimeStamp(qint64);
 
-class CustomMediaPlayer : public QWidget
+class MediaPlayer : public QWidget
 {
-        Q_OBJECT
-    private:
-        QVBoxLayout *playerMainLayout;
-
-        QFrame *outputHolder;
-
-        QMediaPlayer *playerMain;
-        QMediaPlaylist *playlistMain;
-
-        QVideoWidget *playerOutput;
-
-        CustomPlayerControls *playerControls;
-
-
+    Q_OBJECT
 
     public:
-        explicit CustomMediaPlayer(QWidget *parent = nullptr);
+        MediaPlayer(QWidget *parent);
 
-        QMediaPlaylist* getPlaylist();
-        QMediaPlayer* getPlayer();
-        CustomPlayerControls* getControls();
-    signals:
-        void mediaAdded(QString);
+        void setPlaylist(QMediaPlaylist*);
+
+        QSlider *getSlider();
+        QMediaPlaylist *getPlaylist();
+        QMediaPlayer  *getPlayer();
+    private:
+        QVBoxLayout *mainLayout;
+
+        QHBoxLayout *secondaryLayout, *primaryLayout;
+
+        QMediaPlayer *playerMain;
+        QVideoWidget *playerOutput;
+
+        QPushButton *playButton, *pauseButton;
+        QSlider *audioSlider;
+        QLabel *timeStamp;
+
     public slots:
-        void addMedia();
+        void updateTimeStamp(qint64);
+
+
+
 
 
 };
 
-#endif // CUSTOMMEDIAPLAYER_H
+#endif // MEDIAPLAYER_H

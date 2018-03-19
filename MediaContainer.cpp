@@ -204,8 +204,6 @@ void MediaContainer::changeSpeed(float speedChanger, QString mediaFolder)
 
     commandList << "-i"
                 << inputName
-                << "-q"
-                << "1"
                 << "-vf"
                 << "setpts=" + QString::number(1 / speedChanger) + "*PTS"
                 << "-filter:a"
